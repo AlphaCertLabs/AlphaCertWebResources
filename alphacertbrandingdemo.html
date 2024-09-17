@@ -26,7 +26,6 @@
             position: absolute;
             opacity: 0;
             pointer-events: none;
-            border-radius: 20px;
         }
 
         @keyframes fade-in-out {
@@ -63,13 +62,23 @@
             var shape = document.createElement('div');
             shape.className = 'shape';
 
-            // Random size
-            var width = Math.random() * 200 + 300; // Width between 300 and 500 pixels
-            var height = Math.random() * 200 + 300; // Height between 300 and 500 pixels
+            // Calculate size to be around 80% of the screen dimensions
+            var width = window.innerWidth * 0.6;
+            var height = window.innerHeight * 0.6;
 
-            // Random position
-            var posX = Math.random() * (window.innerWidth + width) - width / 2;
-            var posY = Math.random() * (window.innerHeight + height) - height / 2;
+            // Calculate safe area to avoid logo overlap
+            var safeArea = 20; // Pixels around the center to avoid
+            var posX, posY;
+
+            do {
+                posX = Math.random() * (window.innerWidth + width) - width / 2;
+                posY = Math.random() * (window.innerHeight + height) - height / 2;
+            } while (
+                posX > (window.innerWidth / 2 - safeArea) &&
+                posX < (window.innerWidth / 2 + safeArea) &&
+                posY > (window.innerHeight / 2 - safeArea) &&
+                posY < (window.innerHeight / 2 + safeArea)
+            );
 
             // Random color from the specified colors
             var colors = ['#B7F5D9', '#54FCA9', '#F2F0F0', '#003D3B', '#0A222', '#9CE5F3', '#003344'];
@@ -82,9 +91,19 @@
             shape.style.left = posX + 'px';
             shape.style.top = posY + 'px';
 
-            // Random border radius to make rounded rectangles
-            var borderRadius = Math.random() * 50 + 20; // between 20px and 70px
-            shape.style.borderRadius = borderRadius + 'px';
+            // Randomly round 1 to 3 corners with a minimum of 40% radius
+            var corners = [0, 0, 0, 0]; // top-left, top-right, bottom-right, bottom-left
+            var numRoundedCorners = Math.floor(Math.random() * 3) + 1; // 1 to 3 corners rounded
+            while (numRoundedCorners > 0) {
+                var cornerIndex = Math.floor(Math.random() * 10);
+                if (corners[cornerIndex] === 0) {
+                    corners[cornerIndex] = Math.random() * 20 + 10; // Random rounding between 20% and 100%
+                    numRoundedCorners--;
+                }
+            }
+
+            shape.style.borderRadius = 
+                `${corners[0]}% ${corners[1]}% ${corners[2]}% ${corners[3]}%`;
 
             // Random fade-in-out duration and delay
             var duration = Math.random() * 5 + 5; // Between 5s and 10s
@@ -110,7 +129,7 @@
                 if (shape.parentNode) {
                     shape.parentNode.removeChild(shape);
                 }
-            }, (duration + delay) * 1000 + 1000); // Remove after duration + delay + extra second
+            }, (duration + delay) * 2000 + 2000); // Remove after duration + delay + extra second
         }
 
         function startAnimation() {
