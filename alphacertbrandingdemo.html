@@ -26,6 +26,7 @@
             position: absolute;
             opacity: 0;
             pointer-events: none;
+            border-radius: 20px;
         }
 
         @keyframes fade-in-out {
@@ -62,23 +63,13 @@
             var shape = document.createElement('div');
             shape.className = 'shape';
 
-            // Calculate size to be around 80% of the screen dimensions
-            var width = window.innerWidth * 0.4;
-            var height = window.innerHeight * 0.6;
+            // Random size
+            var width = Math.random() * 200 + 1200; // Width between 300 and 500 pixels
+            var height = Math.random() * 200 + 800; // Height between 300 and 500 pixels
 
-            // Calculate safe area to avoid logo overlap
-            var safeArea = 100; // Pixels around the center to avoid
-            var posX, posY;
-
-            do {
-                posX = Math.random() * (window.innerWidth + width) - width / 2;
-                posY = Math.random() * (window.innerHeight + height) - height / 2;
-            } while (
-                posX > (window.innerWidth / 2 - safeArea) &&
-                posX < (window.innerWidth / 2 + safeArea) &&
-                posY > (window.innerHeight / 2 - safeArea) &&
-                posY < (window.innerHeight / 2 + safeArea)
-            );
+            // Random position
+            var posX = Math.random() * (window.innerWidth + width) - width / 2;
+            var posY = Math.random() * (window.innerHeight + height) - height / 2;
 
             // Random color from the specified colors
             var colors = ['#B7F5D9', '#54FCA9', '#F2F0F0', '#003D3B', '#0A222', '#9CE5F3', '#003344'];
@@ -91,28 +82,18 @@
             shape.style.left = posX + 'px';
             shape.style.top = posY + 'px';
 
-            // Randomly round 1 to 3 corners with a minimum of 40% radius
-            var corners = [0, 0, 0, 0]; // top-left, top-right, bottom-right, bottom-left
-            var numRoundedCorners = Math.floor(Math.random() * 2) + 1; // 1 to 2 corners rounded
-            while (numRoundedCorners > 0) {
-                var cornerIndex = Math.floor(Math.random() * 10);
-                if (corners[cornerIndex] === 0) {
-                    corners[cornerIndex] = Math.random() * 20 + 20; // Random rounding between 20% and 100%
-                    numRoundedCorners--;
-                }
-            }
-
-            shape.style.borderRadius = 
-                `${corners[0]}% ${corners[1]}% ${corners[2]}% ${corners[3]}%`;
+            // Random border radius to make rounded rectangles
+            var borderRadius = Math.random() * 50 + 20; // between 20px and 70px
+            shape.style.borderRadius = borderRadius + 'px';
 
             // Random fade-in-out duration and delay
-            var duration = Math.random() * 5 + 10; // Between 5s and 10s
-            var delay = Math.random() * 5 + 3; // Between 3s and 5s
+            var duration = Math.random() * 5 + 15; // Between 5s and 10s
+            var delay = Math.random() * 3; // Between 0s and 3s
 
             shape.style.animation = `fade-in-out ${duration}s ease-in-out ${delay}s forwards`;
 
             // Sometimes float around lazily
-            var shouldFloat = Math.random() < 0.5; // 70% chance to float
+            var shouldFloat = Math.random() < 0.8; // 80% chance to float
             if (shouldFloat) {
                 var moveX = (Math.random() - 0.5) * 200; // Between -100px and +100px
                 var moveY = (Math.random() - 0.5) * 200; // Between -100px and +100px
@@ -129,13 +110,13 @@
                 if (shape.parentNode) {
                     shape.parentNode.removeChild(shape);
                 }
-            }, (duration + delay) * 2000 + 2000); // Remove after duration + delay + extra second
+            }, (duration + delay) * 3000 + 3000); // Remove after duration + delay + extra seconds
         }
 
         function startAnimation() {
             function createShapesAtRandomTime() {
                 createShape();
-                var randomTime = Math.random() * 1000 + 500; // Between 500ms and 1500ms
+                var randomTime = Math.random() * 500 + 2500; // Between 500ms and 2500ms
                 setTimeout(createShapesAtRandomTime, randomTime);
             }
             createShapesAtRandomTime();
