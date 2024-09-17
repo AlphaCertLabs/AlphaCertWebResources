@@ -63,11 +63,11 @@
             shape.className = 'shape';
 
             // Calculate size to be around 80% of the screen dimensions
-            var width = window.innerWidth * 0.6;
+            var width = window.innerWidth * 0.4;
             var height = window.innerHeight * 0.6;
 
             // Calculate safe area to avoid logo overlap
-            var safeArea = 20; // Pixels around the center to avoid
+            var safeArea = 100; // Pixels around the center to avoid
             var posX, posY;
 
             do {
@@ -93,11 +93,11 @@
 
             // Randomly round 1 to 3 corners with a minimum of 40% radius
             var corners = [0, 0, 0, 0]; // top-left, top-right, bottom-right, bottom-left
-            var numRoundedCorners = Math.floor(Math.random() * 3) + 1; // 1 to 3 corners rounded
+            var numRoundedCorners = Math.floor(Math.random() * 2) + 1; // 1 to 2 corners rounded
             while (numRoundedCorners > 0) {
                 var cornerIndex = Math.floor(Math.random() * 10);
                 if (corners[cornerIndex] === 0) {
-                    corners[cornerIndex] = Math.random() * 20 + 10; // Random rounding between 20% and 100%
+                    corners[cornerIndex] = Math.random() * 20 + 20; // Random rounding between 20% and 100%
                     numRoundedCorners--;
                 }
             }
@@ -106,13 +106,13 @@
                 `${corners[0]}% ${corners[1]}% ${corners[2]}% ${corners[3]}%`;
 
             // Random fade-in-out duration and delay
-            var duration = Math.random() * 5 + 5; // Between 5s and 10s
-            var delay = Math.random() * 5; // Between 0s and 5s
+            var duration = Math.random() * 5 + 10; // Between 5s and 10s
+            var delay = Math.random() * 5 + 3; // Between 3s and 5s
 
             shape.style.animation = `fade-in-out ${duration}s ease-in-out ${delay}s forwards`;
 
             // Sometimes float around lazily
-            var shouldFloat = Math.random() < 0.5; // 50% chance to float
+            var shouldFloat = Math.random() < 0.5; // 70% chance to float
             if (shouldFloat) {
                 var moveX = (Math.random() - 0.5) * 200; // Between -100px and +100px
                 var moveY = (Math.random() - 0.5) * 200; // Between -100px and +100px
