@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stylish Animation</title>
+    <style>
+        html, body, #container {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0A2220;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            width: 80%;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+            border-radius: 20px;
+        }
+
+        @keyframes fade-in-out {
+            0% {
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes float {
+            from {
+                transform: translate(0, 0);
+            }
+            to {
+                transform: translate(var(--moveX), var(--moveY));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <img id="logo" src="logo.png" alt="Logo">
+    </div>
+    <script>
+        function createShape() {
+            var shape = document.createElement('div');
+            shape.className = 'shape';
+
+            // Random size
+            var width = Math.random() * 200 + 300; // Width between 300 and 500 pixels
+            var height = Math.random() * 200 + 300; // Height between 300 and 500 pixels
+
+            // Random position
+            var posX = Math.random() * (window.innerWidth + width) - width / 2;
+            var posY = Math.random() * (window.innerHeight + height) - height / 2;
+
+            // Random color from the specified colors
+            var colors = ['#B7F5D9', '#54FCA9', '#F2F0F0', '#003D3B', '#0A222', '#9CE5F3', '#003344'];
+            var color = colors[Math.floor(Math.random() * colors.length)];
+
+            // Apply styles
+            shape.style.width = width + 'px';
+            shape.style.height = height + 'px';
+            shape.style.backgroundColor = color;
+            shape.style.left = posX + 'px';
+            shape.style.top = posY + 'px';
+
+            // Random border radius to make rounded rectangles
+            var borderRadius = Math.random() * 50 + 20; // between 20px and 70px
+            shape.style.borderRadius = borderRadius + 'px';
+
+            // Random fade-in-out duration and delay
+            var duration = Math.random() * 5 + 5; // Between 5s and 10s
+            var delay = Math.random() * 5; // Between 0s and 5s
+
+            shape.style.animation = `fade-in-out ${duration}s ease-in-out ${delay}s forwards`;
+
+            // Sometimes float around lazily
+            var shouldFloat = Math.random() < 0.5; // 50% chance to float
+            if (shouldFloat) {
+                var moveX = (Math.random() - 0.5) * 200; // Between -100px and +100px
+                var moveY = (Math.random() - 0.5) * 200; // Between -100px and +100px
+                shape.style.setProperty('--moveX', moveX + 'px');
+                shape.style.setProperty('--moveY', moveY + 'px');
+                var floatDuration = duration; // Move during the fade-in-out duration
+                shape.style.animation += `, float ${floatDuration}s ease-in-out ${delay}s forwards`;
+            }
+
+            document.getElementById('container').appendChild(shape);
+
+            // Remove shape after animation ends
+            setTimeout(function() {
+                if (shape.parentNode) {
+                    shape.parentNode.removeChild(shape);
+                }
+            }, (duration + delay) * 1000 + 1000); // Remove after duration + delay + extra second
+        }
+
+        function startAnimation() {
+            function createShapesAtRandomTime() {
+                createShape();
+                var randomTime = Math.random() * 1000 + 500; // Between 500ms and 1500ms
+                setTimeout(createShapesAtRandomTime, randomTime);
+            }
+            createShapesAtRandomTime();
+        }
+
+        window.onload = function() {
+            startAnimation();
+        };
+    </script>
+</body>
+</html>
